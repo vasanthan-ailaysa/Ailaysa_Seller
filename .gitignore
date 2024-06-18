@@ -3,6 +3,7 @@
 __pycache__
 **/*.pyc
 **/__pycache__
+*/migrations
 
 #database
 .DS_Store
