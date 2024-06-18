@@ -1,0 +1,20 @@
+#python caches
+*.pyc
+__pycache__
+**/*.pyc
+**/__pycache__
+
+#database
+.DS_Store
+*.db
+
+# environment file
+.env
+
+# Pycharm
+.idea/
+
+# VS code
+.vscode/
+*.code-workspace
+.history/
