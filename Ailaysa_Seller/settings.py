@@ -14,10 +14,11 @@ from datetime import timedelta
 from pathlib import Path
 import os
 import environ
-env = environ.Env(
-  # set casting, default value
-  DEBUG=(bool, False)
-)
+
+# environment variable
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env()
+PRODUCTION_ENV = env.get_value('PRODUCTION_ENV', bool, False)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,8 +39,15 @@ DEBUG = env("DEBUG")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
+# changing settings for allowed hosts
+if PRODUCTION_ENV:
+    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+    CORS_ALLOWED_ORIGINS = env.list('ALLOWED_CORS_ORIGINS')
+else:
+    ALLOWED_HOSTS = ['*']
+    CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -52,8 +60,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'Ailaysa_app',
+    'corsheaders',
+
     'seller_auth',
+    'Ailaysa_app',
 ]
 
 REST_FRAMEWORK = {
@@ -63,6 +73,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
