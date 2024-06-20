@@ -4,12 +4,12 @@ from seller_auth.serializers import UserSerializer
 from rest_framework.response import Response
 
 
-"""
-Registraion API View
-"""
 class RegisterView(APIView):
+    """
+    Registraion API View
+    """
     def post(self, request):
-        serializer = UserSerializer(SellerUser, request.data)
+        serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
