@@ -7,6 +7,10 @@ from seller_auth.models import SellerUser
 isbn13_min_length_validator = MinLengthValidator(13, "ISBN-13 must be exactly 13 characters long.") 
 isbn13_max_length_validator = MaxLengthValidator(17, "ISBN-13 cannot exceed 17 characters in length.")
 
+#validate isbn10 min,max length 
+isbn10_min_length_validator = MinLengthValidator(10, "ISBN-10 must be exactly 10 characters long.")
+isbn10_max_length_validator = MaxLengthValidator(10,"ISBN-10 cannot exceed 10 characters in length.")
+
 #genre model
 class Genre(models.Model):
     genre_type = models.CharField(max_length=50,null=False,blank=False)
@@ -28,8 +32,8 @@ class Book(models.Model):
     language_id = models.ForeignKey(Language,on_delete=models.CASCADE,null=False,blank=False)   #dropdown list
     publisher_id  = models.ForeignKey(SellerUser,on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
-    isbn10 = models.CharField(max_length=50,unique=True) #International Standard Book NUmber
-    isbn13 = models.CharField(max_length=17, validators=[isbn13_min_length_validator, isbn13_max_length_validator])#International Standard Book NUmber
+    isbn10 = models.CharField(max_length=10,unique=True,validators=[isbn10_min_length_validator, isbn10_max_length_validator]) #International Standard Book NUmber
+    isbn13 = models.CharField(max_length=17, unique=True,validators=[isbn13_min_length_validator, isbn13_max_length_validator])#International Standard Book NUmber
     date_of_publication = models.DateField()
     number_of_pages = models.PositiveIntegerField()
     book_cover = models.ImageField(upload_to='profile_pictures/', blank=False, null=False)
@@ -52,6 +56,3 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
-    
-
-
