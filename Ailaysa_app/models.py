@@ -39,3 +39,5 @@ class Book(models.Model):
     edited_by = models.CharField(max_length=50, blank=True, null=True)
     illustrated_by = models.CharField(max_length=50, blank=True, null=True)
     translated_by = models.CharField(max_length=50, blank=True, null=True)
+    
+    
