@@ -1,53 +1,57 @@
 from django.db import models
 from django.core.validators import MinLengthValidator , MaxLengthValidator
+from seller_auth.models import SellerUser
+import re
 
-# Create your models here.
+#validate isbn13 min,max length
+isbn13_min_length_validator = MinLengthValidator(13, "ISBN-13 must be exactly 13 characters long.") 
+isbn13_max_length_validator = MaxLengthValidator(17, "ISBN-13 cannot exceed 17 characters in length.")
+
+#genre model
+class Genre(models.Model):
+    genre_type = models.CharField(max_length=50,null=False,blank=False)
+
+#language model 
+class Language(models.Model):
+    language = models.CharField(max_length=100,null=False,blank=False)
+
+#format model
+class FormatType(models.Model):
+    format_name = models.CharField(max_length=100,unique=True)
+
+
 class Book(models.Model):
     #mandatory feilds
     
     title = models.CharField(max_length=200)
+    genre_id = models.ForeignKey(Genre,on_delete=models.CASCADE,null=False,blank=False) #dropdownList
+    language_id = models.ForeignKey(Language,on_delete=models.CASCADE,null=False,blank=False)   #dropdown list
+    publisher_id  = models.ForeignKey(SellerUser,on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
-    publisher = models.CharField(max_length=100)
-    language = models.CharField(max_length=50)   #dropdown list
-    isbn13 = models.CharField(max_length=13, unique=True , validators=[MinLengthValidator(13), MaxLengthValidator(13)])
-    isbn10 = models.CharField(unique=True, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
-    genre = models.CharField(max_length=50)     #dropdown list
+    isbn10 = models.CharField(max_length=50,unique=True) #International Standard Book NUmber
+    isbn13 = models.CharField(max_length=17, validators=[isbn13_min_length_validator, isbn13_max_length_validator])#International Standard Book NUmber
     date_of_publication = models.DateField()
-    number_of_pages = models.IntegerField()
-    book_cover = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    about_author = models.TextField()
+    number_of_pages = models.PositiveIntegerField()
+    book_cover = models.ImageField(upload_to='profile_pictures/', blank=False, null=False)
+    author_bio = models.TextField(null=True,blank=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
-    format = models.CharField(max_length=50)   #dropdown list
+    format_id  = models.ForeignKey(FormatType,on_delete=models.CASCADE)  #dropdown list
     
     #non mandatory feilds`
-    unit_weight = models.IntegerField(null=True)
+    unit_weight = models.IntegerField(null=True,blank=True)
     price = models.IntegerField(null=True)
     title_in_original_language = models.CharField(max_length=50,null=True)
     co_publisher = models.CharField(max_length=100 ,null=True) 
     winner = models.TextField(null=True)   
-    short_listed = models.TextField(null=True)
-    status = models.CharField(max_length=100 , null=True)  #dropdown list
-    overall_height = models.FloatField(verbose_name="Overall Height (cm)",null=True)
-    overall_width = models.FloatField(verbose_name="Overall Width (cm)",null=True)
-    overall_thickness = models.FloatField(verbose_name="Overall Thickness (cm)", null=True)
-    page_trim_height = models.FloatField(verbose_name="Page Trim Height (cm)", null=True)
-    page_trim_width = models.FloatField(verbose_name="Page Trim Width (cm)", null=True)
-    publisher_website = models.URLField(max_length=200, blank=True, null=True, help_text="Publisher's website URL")
     country_of_publication = models.CharField(max_length=100, help_text="Country of publication",null=True) #dropdownlist
     designed_by = models.CharField(max_length=50, blank=True, null=True)
     edited_by = models.CharField(max_length=50, blank=True, null=True)
-    illustrated_by = models.CharField(max_length=50, blank=True, null=True)
     translated_by = models.CharField(max_length=50, blank=True, null=True)
-    
-    
-    
-    # LANGUAGE_CHOICES = [
-    #     ('en', 'English'),
-    #     ('es', 'Spanish'),
-    #     ('fr', 'French'),
-    #     ('de', 'German'),
-    #     # Add more languages as needed
-    # ]
 
-    # language = models.CharField( max_length=2, choices=LANGUAGE_CHOICES,default='en',)
+
+    def __str__(self):
+        return self.title
+    
+
+
