@@ -10,7 +10,7 @@ class Book(models.Model):
     publisher = models.CharField(max_length=100)
     language = models.CharField(max_length=50)   #dropdown list
     isbn13 = models.CharField(max_length=13, unique=True , validators=[MinLengthValidator(13), MaxLengthValidator(13)])
-    isbn10 = models.CharField(max_length=10 , unique=True, validators=[MinLengthValidator(10),MaxLengthValidator(10)])
+    isbn10 = models.CharField(unique=True, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
     genre = models.CharField(max_length=50)     #dropdown list
     date_of_publication = models.DateField()
     number_of_pages = models.IntegerField()
@@ -20,7 +20,7 @@ class Book(models.Model):
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
     format = models.CharField(max_length=50)   #dropdown list
     
-    #non mandatory feilds
+    #non mandatory feilds`
     unit_weight = models.IntegerField(null=True)
     price = models.IntegerField(null=True)
     title_in_original_language = models.CharField(max_length=50,null=True)
