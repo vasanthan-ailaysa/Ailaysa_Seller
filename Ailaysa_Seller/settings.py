@@ -71,6 +71,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTH_USER_MODEL = 'seller_auth.SellerUser'
+
 ROOT_URLCONF = 'Ailaysa_Seller.urls'
 
 TEMPLATES = [
