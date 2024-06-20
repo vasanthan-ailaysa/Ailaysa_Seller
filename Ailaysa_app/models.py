@@ -10,7 +10,7 @@ class Book(models.Model):
     publisher = models.CharField(max_length=100)
     language = models.CharField(max_length=50)   #dropdown list
     isbn13 = models.CharField(max_length=13, unique=True , validators=[MinLengthValidator(13), MaxLengthValidator(13)])
-    isbn10 = models.BigIntegerField(max_length=10 , unique=True, validators=[MinLengthValidator(10),MaxLengthValidator(10)])
+    isbn10 = models.CharField(max_length=10 , unique=True, validators=[MinLengthValidator(10),MaxLengthValidator(10)])
     genre = models.CharField(max_length=50)     #dropdown list
     date_of_publication = models.DateField()
     number_of_pages = models.IntegerField()
@@ -41,13 +41,3 @@ class Book(models.Model):
     translated_by = models.CharField(max_length=50, blank=True, null=True)
     
     
-    
-    # LANGUAGE_CHOICES = [
-    #     ('en', 'English'),
-    #     ('es', 'Spanish'),
-    #     ('fr', 'French'),
-    #     ('de', 'German'),
-    #     # Add more languages as needed
-    # ]
-
-    # language = models.CharField( max_length=2, choices=LANGUAGE_CHOICES,default='en',)
