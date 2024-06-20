@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinLengthValidator , MaxLengthValidator
 from seller_auth.models import SellerUser
-import re
+
 
 #validate isbn13 min,max length
 isbn13_min_length_validator = MinLengthValidator(13, "ISBN-13 must be exactly 13 characters long.") 
