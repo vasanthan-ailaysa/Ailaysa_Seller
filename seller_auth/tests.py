@@ -16,7 +16,7 @@ class ResisterTestCase(APITestCase):
             'email': 'aaa@gmail.com',
             'password': 'abcd1234'
         }
-        response = self.client(url, data, format='json')
+        response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(SellerUser.objects.count(), 1)
