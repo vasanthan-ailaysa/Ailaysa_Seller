@@ -6,9 +6,9 @@ from Ailaysa_app.permissions import IsSeller
 
 
 
-class BookCreate(generics.ListCreateAPIView):
+class BookListView(generics.ListAPIView):
     """
-    view to list and create bookdata
+    view to list bookdata
     """
 
     queryset = Book.objects.all()
@@ -16,7 +16,17 @@ class BookCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class BookDetail(generics.RetrieveUpdateDestroyAPIView):
+class BookCreateView(generics.ListAPIView):
+    """
+    view to create bookdata
+    """
+
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsSeller]
+
+
+class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     view to retrieve, update and delete bookdata
     """
