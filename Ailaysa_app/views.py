@@ -12,7 +12,7 @@ class BookCreate(generics.ListCreateAPIView):
     """
 
     queryset = Book.objects.all()
-    serializer = BookSerializer
+    serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
 
 
@@ -22,5 +22,5 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     """
 
     queryset = Book.objects.all()
-    serializer = BookSerializer
+    serializer_class = BookSerializer
     permission_classes = [IsSeller]

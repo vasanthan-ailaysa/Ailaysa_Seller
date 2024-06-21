@@ -47,6 +47,9 @@ else:
     ALLOWED_HOSTS = ['*']
     CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOW_CREDENTIALS = True
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -60,8 +63,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
 
-    'seller_auth',
-    'Ailaysa_app',
+    'seller_auth.apps.SellerAuthConfig',
+    'Ailaysa_app.apps.AilaysaAppConfig',
 ]
 
 REST_FRAMEWORK = {
