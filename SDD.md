@@ -23,13 +23,9 @@
     - name
     - address
     - country
-    - staff_id
-  - staff
-    - publisher_id
 
 #### Relationships
-- user - staff (one to one)
-- staff - publisher (many to one)
+- user - publisher (many to one)
 - book - publisher (many to one)
 - book - author (many to one)
 
