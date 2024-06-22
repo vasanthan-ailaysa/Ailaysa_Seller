@@ -12,37 +12,47 @@ class ResisterTestCase(APITestCase):
     def test_register(self):
         url = reverse('sign_up')
         data = {
-            'name': 'registeruser',
-            'email': 'registeruser@gmail.com',
-            'password': 'abcd@1234'
+            "name": "user2",
+            "email": "user2@gmail.com",
+            "password": "dsahskdjfhdkjf"
         }
         response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # self.assertEqual(SellerUser.objects.count(), 1)
-        # self.assertEqual(SellerUser.objects.get().name, 'AAA')
 
 
 class LoginLogoutTestCase(APITestCase):
     """
     To test the login logout of the user
     """
+    refresh_token = ''
+    access_token = ''
 
-    def SetUp(self):
+    def setUp(self):
         """
         function to create the user
         """
         self.user = SellerUser.objects.create_user(
-            name='testcaseuser',
-            email='testcaseuser@gmail.com',
-            password='1234@abcd'
+            name="testcaseuser",
+            email="testcaseuser@gmail.com",
+            password="1234@abcd"
         )
+
 
     def test_login(self):
         data = {
             'email': 'testcaseuser@gmail.com',
             'password': '1234@abcd',
         }
-        url = reverse('token_obtain_pair')
+        url = reverse('login')
         response = self.client.post(url, data)
+        self.refresh_token = response.data["refresh_token"]
+        self.access_token = response.data["access_token"]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    # TODO test logout
+    def test_logout(self):
+        url = reverse('logout')
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(self.access_token))
+        response = self.client.post(url, {"refresh_token": str(self.refresh_token)})
+        self.assertEqual(response.status_code, status.HTTP_205_RESET_CONTENT)
