@@ -1,12 +1,27 @@
 # Ailaysa Sellers Page
 
+## Requirements Specification
 
-## Tasks
+    ### Data Requirements
 
-- User api
-- authentication and authorisation
-- Book models
-- book api
+
+    ### Functional Requirements
+
+
+    ### Non Functional Requirements
+
+
+## Testing
+
+
+## Deployment
+
+
+# Todo
+
+- user authentication and authorisation api
+- Book seller API
 - test cases
 - frontend
 - deployment
+- documentation

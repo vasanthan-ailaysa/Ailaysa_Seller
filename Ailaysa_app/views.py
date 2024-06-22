@@ -5,7 +5,6 @@ from Ailaysa_app.serializers import BookSerializer
 from Ailaysa_app.permissions import IsSeller
 
 
-
 class BookListView(generics.ListAPIView):
     """
     view to list bookdata
@@ -16,7 +15,7 @@ class BookListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class BookCreateView(generics.ListAPIView):
+class BookCreateView(generics.CreateAPIView):
     """
     view to create bookdata
     """
