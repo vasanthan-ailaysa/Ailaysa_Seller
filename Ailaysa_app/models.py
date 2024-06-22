@@ -21,19 +21,17 @@ class Language(models.Model):
     language = models.CharField(max_length=100, null=False, blank=False)
 
 
-# format model
-class FormatType(models.Model):
-    format_name = models.CharField(max_length=100, unique=True)
+
 
 
 class Book(models.Model):
     # mandatory fields
     title = models.CharField(max_length=200)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False, blank=False)  # dropdownList
-    language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False, blank=False)  # dropdown list
-    seller = models.ForeignKey(SellerUser, on_delete=models.CASCADE)
-    publisher = models.CharField(max_length=50)
     author = models.CharField(max_length=50)
+    publisher = models.CharField(max_length=50)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False, blank=False)  # dropdown list
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False, blank=False)  # dropdownList
+    seller = models.ForeignKey(SellerUser, on_delete=models.CASCADE)
     isbn10 = models.CharField(max_length=10, unique=True, validators=[isbn10_min_length_validator,
                                                                       isbn10_max_length_validator])  # International Standard Book NUmber
     isbn13 = models.CharField(max_length=17, unique=True, validators=[isbn13_min_length_validator,
@@ -44,7 +42,7 @@ class Book(models.Model):
     author_bio = models.TextField(null=True, blank=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
-    format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # dropdown list
+    format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # dropdown list uses choices
 
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)

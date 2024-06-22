@@ -1,27 +1,13 @@
-# Ailaysa Sellers Page
 
-## Requirements Specification
-
-    ### Data Requirements
-
-
-    ### Functional Requirements
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    about = models.TextField(null=True, blank=True)
 
 
-    ### Non Functional Requirements
+class Publisher(models.Model):
+    name = models.CharField(max_length=200)
+    
 
 
-## Testing
-
-
-## Deployment
-
-
-# Todo
-
-- user authentication and authorisation api
-- Book seller API
-- test cases
-- frontend
-- deployment
-- documentation
+class Staff(models.Model):
+    pass
