@@ -1,56 +1,56 @@
 # Ailaysa Book Sellers Page
 
-## Requirements Specification
+## Software Requirements Specification
+### Data Requirements 
+- The site allows publishers to publish their book. Each publisher has unique id, name, address
+- A publisher has many books. Each book is written by an author and has a unique id, title, isbn, language, language, etc.,
+- A publisher has many staff members. Each has a unique id, name, email
 
-### Data Requirements
-#### Entities and Attributes
-  - user 
+### Functional Requirements
+- User Authentication
+  - Staff user must be able to register and create account
+  - user should be able to log in into and logout from their account in the site
+- Book data management
+  - logged in staff user must be able to perform crud operations on the book data owned by their publication
+
+### Non Functional Requirements
+
+## Database Schema Design
+### Entities and Attributes
+  - User (staff member)
     - name
     - email
     - password
     - staff_id
-  - book
+  - Book
     - title
     - author
     - publisher
     - isbn
     - language
     - genre
-  - author
+  - Author
     - name
     - about
-  - publisher
+  - Publisher
     - name
     - address
     - country
 
-#### Relationships
-- user - publisher (many to one)
-- book - publisher (many to one)
-- book - author (many to one)
+### Relationships
+- Publisher - Staff User (one to many)
+- Publisher - Book (one to many)
+- Author - Book (one to many)
 
-
-
-
-### Functional Requirements
-- staff user must be able to register, login, and logout form the app
-- staff user must be able to perform crud operations on the book data owned by their publication
-
-
-### Non Functional Requirements
-
+## Development
+- User authentication and authorisation API
+- Book seller API
+- Test cases
+- Frontend
+- Deployment
+- Documentation
 
 ## Testing
 
 
 ## Deployment
-
-
-# Todo
-
-- user authentication and authorisation api
-- Book seller API
-- test cases
-- frontend
-- deployment
-- documentation
