@@ -8,7 +8,7 @@ class SellerUser(AbstractBaseUser, PermissionsMixin):
     username = None
     name = models.CharField(max_length=100, unique=True, null=False)
     email = models.EmailField(max_length=100, unique=True, null=False)
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False, related_name='staffs', related_query_name='staff')
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
