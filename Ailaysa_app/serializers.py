@@ -21,18 +21,6 @@ class PublisherSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class BookSerializer(serializers.ModelSerializer):
-    """
-    Serializer class for Book model
-    """
-    author = AuthorSerializer(many=True)
-    publisher = PublisherSerializer(many=True)
-
-    class Meta:
-        model = Book
-        fields = '__all__'
-
-
 class LanguageSerializer(serializers.ModelSerializer):
     """
     Serializer class for Language model
@@ -41,7 +29,8 @@ class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
         fields = '__all__'
-        
+
+
 class GenreSerializer(serializers.ModelSerializer):
     """
     Serializer class for Genre model
@@ -49,5 +38,19 @@ class GenreSerializer(serializers.ModelSerializer):
     
     class Mete:
         model = Genre
-        feilds = '__all__'
+        fields = '__all__'
+
+
+class BookSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for Book model
+    """
+    author = AuthorSerializer(many=True)
+    publisher = PublisherSerializer(many=True)
+    language = LanguageSerializer(many=True, read_only=True)
+    genre = GenreSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Book
+        fields = '__all__'
         

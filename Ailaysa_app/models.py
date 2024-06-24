@@ -11,36 +11,14 @@ isbn10_min_length_validator = MinLengthValidator(10, "ISBN-10 must be exactly 10
 isbn10_max_length_validator = MaxLengthValidator(10, "ISBN-10 cannot exceed 10 characters in length.")
 
 
-# genre model
-class Genre(models.Model):
-    """
-    Genre model class
-    """
-    genre = models.CharField(max_length=50, null=False, blank=False)
-    
-    def __str__(self):
-        return self.genre
-
-
-
-# language model
-class Language(models.Model):
-    """
-    Language model class
-    """
-    language = models.CharField(max_length=100, null=False, blank=False)
-    
-    def __str__(self):
-        return self.language
-
-
-
 class Author(models.Model):
     """
     Author model class
     """
     name = models.CharField(max_length=200)
     about = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -53,9 +31,35 @@ class Publisher(models.Model):
     name = models.CharField(max_length=200)
     address = models.TextField(null=True, blank=True)
     country = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+
+
+class Language(models.Model):
+    """
+    Language model class
+    """
+    language = models.CharField(max_length=100, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.language
+
+
+class Genre(models.Model):
+    """
+    Genre model class
+    """
+    genre = models.CharField(max_length=50, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.genre
 
 
 class Book(models.Model):
@@ -63,13 +67,13 @@ class Book(models.Model):
     Book model class
     """
     
-    FORMAT_CHOICES = (
-        ('Paperback'),
-        ('Hardcover'),
-        ('Ebook'),
-        ('Audiobook'),
-        ('Chatbook')
-    )
+    FORMAT_CHOICES = [
+        ('Paperback', 'Paperback'),
+        ('Hardcover', 'Hardcover'),
+        ('Ebook', 'Ebook'),
+        ('Audiobook', 'Audiobook'),
+        ('Chatbook', 'Chatbook'),
+    ]
 
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
@@ -87,7 +91,7 @@ class Book(models.Model):
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
     format = models.CharField(max_length=50, choices=FORMAT_CHOICES)
-    price = models.IntegerField()
+    price = models.IntegerField(default=0)
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)
     title_in_original_language = models.CharField(max_length=50, null=True)
@@ -97,6 +101,8 @@ class Book(models.Model):
     designed_by = models.CharField(max_length=50, blank=True, null=True)
     edited_by = models.CharField(max_length=50, blank=True, null=True)
     translated_by = models.CharField(max_length=50, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
