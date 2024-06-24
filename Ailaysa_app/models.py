@@ -13,7 +13,7 @@ isbn10_max_length_validator = MaxLengthValidator(10, "ISBN-10 cannot exceed 10 c
 
 # genre model
 class Genre(models.Model):
-    genre_type = models.CharField(max_length=50, null=False, blank=False)
+    genre = models.CharField(max_length=50, null=False, blank=False)
 
 
 # language model
@@ -49,8 +49,8 @@ class Book(models.Model):
     Book model class
     """
     title = models.CharField(max_length=200)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, blank=False)
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False, blank=False)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False, blank=False)  # dropdown list
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False, blank=False)  # dropdownList
     isbn10 = models.CharField(max_length=10, unique=True, validators=[isbn10_min_length_validator,
@@ -64,9 +64,6 @@ class Book(models.Model):
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
     # format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # uses choices
-    format = models.CharField(max_length=50)  # New format field
-    price = models.IntegerField(null=True)
-
 
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)

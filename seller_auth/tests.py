@@ -45,7 +45,7 @@ class LoginLogoutTestCase(APITestCase):
             'password': '1234@abcd',
         }
         url = reverse('login')
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, follow=True)
         self.refresh_token = response.data["refresh_token"]
         self.access_token = response.data["access_token"]
         self.assertEqual(response.status_code, status.HTTP_200_OK)

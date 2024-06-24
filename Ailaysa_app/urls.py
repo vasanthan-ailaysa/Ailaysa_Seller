@@ -1,9 +1,11 @@
-from django.urls import path
-from Ailaysa_app.views import BookListView, BookCreateView, BookDetailView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from Ailaysa_app.views import BookViewSet
 
+# Create a router and register our ViewSets with it.
+router = DefaultRouter()
+router.register(r'books', BookViewSet, basename='book')
 
 urlpatterns = [
-    path('books/', BookListView.as_view(), name='book-list'),
-    path('books/create/', BookCreateView.as_view(), name='book-create'),
-    path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
+    path('', include(router.urls)),
 ]
