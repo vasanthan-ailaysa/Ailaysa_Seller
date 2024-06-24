@@ -38,7 +38,6 @@ class LoginLogoutTestCase(APITestCase):
             password="1234@abcd"
         )
 
-
     def test_login(self):
         data = {
             'email': 'testcaseuser@gmail.com',

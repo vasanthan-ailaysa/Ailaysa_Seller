@@ -9,6 +9,7 @@ class BookViewSet(viewsets.ModelViewSet):
     """
     Book model viewset
     """
-    queryset = Book.objects.filter(publisher=SellerUser.publisher)
+
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsStaff]

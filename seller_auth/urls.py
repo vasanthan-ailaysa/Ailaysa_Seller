@@ -9,7 +9,3 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='login_refresh'),
     path('logout/', LogoutView.as_view(), name='logout'),
 ]
-
-
-
-# Todo create change password endpoint
