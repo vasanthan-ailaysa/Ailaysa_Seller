@@ -13,12 +13,26 @@ isbn10_max_length_validator = MaxLengthValidator(10, "ISBN-10 cannot exceed 10 c
 
 # genre model
 class Genre(models.Model):
+    """
+    Genre model class
+    """
     genre = models.CharField(max_length=50, null=False, blank=False)
+    
+    def __str__(self):
+        return self.genre
+
 
 
 # language model
 class Language(models.Model):
+    """
+    Language model class
+    """
     language = models.CharField(max_length=100, null=False, blank=False)
+    
+    def __str__(self):
+        return self.language
+
 
 
 class Author(models.Model):
@@ -48,6 +62,15 @@ class Book(models.Model):
     """
     Book model class
     """
+    
+    FORMAT_CHOICES = (
+        ('Paperback'),
+        ('Hardcover'),
+        ('Ebook'),
+        ('Audiobook'),
+        ('Chatbook')
+    )
+
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
@@ -63,11 +86,10 @@ class Book(models.Model):
     author_bio = models.TextField(null=True, blank=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
-    # format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # uses choices
-
+    format = models.CharField(max_length=50, choices=FORMAT_CHOICES)
+    price = models.IntegerField()
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)
-    price = models.IntegerField(null=True)
     title_in_original_language = models.CharField(max_length=50, null=True)
     co_publisher = models.CharField(max_length=100, null=True)
     winner = models.TextField(null=True)
