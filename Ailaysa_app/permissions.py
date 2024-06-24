@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class IsSeller(permissions.BasePermission):
+class IsStaff(permissions.BasePermission):
     """
     Object-level permission to only allow publishers of a book data to view or edit it.
     """
