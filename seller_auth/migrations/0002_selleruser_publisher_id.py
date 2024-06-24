@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='selleruser',
             name='publisher_id',
-            field=models.ForeignKey(default=django.utils.timezone.now, on_delete=django.db.models.deletion.CASCADE, to='Ailaysa_app.publisher'),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='Ailaysa_app.publisher'),
             preserve_default=False,
         ),
     ]
