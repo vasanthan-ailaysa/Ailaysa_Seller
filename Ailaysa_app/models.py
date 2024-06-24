@@ -63,11 +63,13 @@ class Book(models.Model):
     author_bio = models.TextField(null=True, blank=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
-    format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # uses choices
+    # format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # uses choices
+    format = models.CharField(max_length=50)  # New format field
+    price = models.IntegerField(null=True)
+
 
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)
-    price = models.IntegerField(null=True)
     title_in_original_language = models.CharField(max_length=50, null=True)
     co_publisher = models.CharField(max_length=100, null=True)
     winner = models.TextField(null=True)
