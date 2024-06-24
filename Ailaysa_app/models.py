@@ -13,7 +13,7 @@ isbn10_max_length_validator = MaxLengthValidator(10, "ISBN-10 cannot exceed 10 c
 
 # genre model
 class Genre(models.Model):
-    genre_type = models.CharField(max_length=50, null=False, blank=False)
+    genre = models.CharField(max_length=50, null=False, blank=False)
 
 
 # language model
@@ -63,7 +63,7 @@ class Book(models.Model):
     author_bio = models.TextField(null=True, blank=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
-    format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # uses choices
+    # format = models.ForeignKey(FormatType, on_delete=models.CASCADE)  # uses choices
 
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)

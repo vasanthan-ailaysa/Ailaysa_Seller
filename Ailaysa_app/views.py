@@ -1,35 +1,14 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from Ailaysa_app.models import Book
 from Ailaysa_app.serializers import BookSerializer
-from Ailaysa_app.permissions import IsSeller
+from Ailaysa_app.permissions import IsStaff
+from seller_auth.models import SellerUser
 
 
-class BookListView(generics.ListAPIView):
+class BookViewSet(viewsets.ModelViewSet):
     """
-    view to list bookdata
+    Book model viewset
     """
-
-    queryset = Book.objects.all()
+    queryset = Book.objects.filter(publisher=SellerUser.publisher)
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class BookCreateView(generics.CreateAPIView):
-    """
-    view to create bookdata
-    """
-
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsSeller]
-
-
-class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    view to retrieve, update and delete bookdata
-    """
-
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsSeller]
+    permission_classes = [IsStaff]
