@@ -1,28 +1,20 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from seller_auth.Managers import UserManager
+from Ailaysa_app.models import Publisher
 
 
-class SellerUser(AbstractUser):
-    USER_TYPE_CHOICES = (
-        ('Publisher', 'Publisher'),
-        ('Author', 'Author'),
-    )
-
-    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
+class User(AbstractBaseUser, PermissionsMixin):
     username = None
-    name = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, null=False)
+    email = models.EmailField(max_length=100, unique=True, null=False)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
-    def is_publisher(self):
-        return self.user_type == 'Publisher'
-
-    def is_author(self):
-        return self.user_type == 'Author'
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
 

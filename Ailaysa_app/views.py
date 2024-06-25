@@ -1,42 +1,50 @@
-from django.shortcuts import render
-
-# views.py
-
-from rest_framework import generics
-from .models import Book, Language, Genre, FormatType
-from .serializers import BookSerializer, LanguageSerializer, GenreSerializer, FormatSerializer
-
-class BookCreate(generics.ListCreateAPIView):
-    queryset = Book.objects.all()
-    serializer = BookSerializer
-
-class BookDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Book.objects.all()
-    serializer = BookSerializer
+from rest_framework import viewsets, generics
+from rest_framework.permissions import IsAuthenticated
+from Ailaysa_app.models import Book, Language, Genre, Author, Publisher
+from Ailaysa_app.serializers import BookSerializer, LanguageSerializer, GenreSerializer, AuthorSerializer, PublisherSerializer
+from Ailaysa_app.permissions import IsStaff
 
 
-class LanguageCreate(generics.ListCreateAPIView):
+class LanguageListView(generics.ListAPIView):
+    """
+    Language list view
+    """
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
 
-class LanguageDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Language.objects.all()
-    serializer = LanguageSerializer
-
-
-class GenreCreate(generics.ListCreateAPIView):
+    
+class GenreListView(generics.ListAPIView):
+    """
+    Genre list view
+    """
     queryset = Genre.objects.all()
-    serializer = GenreSerializer
+    serializer_class = GenreSerializer
+        
 
-class GenreDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Genre.objects.all()
-    serializer = GenreSerializer
+class AuthorListCreateView(generics.ListCreateAPIView):
+    """
+    Author list create view
+    GET and POST endpoint
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    permission_classes = [IsAuthenticated]
 
-class FormatCreate(generics.ListCreateAPIView):
-    queryset = FormatType.objects.all()
-    serializer = FormatSerializer
 
-class FormatDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = FormatType.objects.all()
-    serializer = FormatSerializer
+class PublisherListCreateView(generics.ListCreateAPIView):
+    """
+    Publisher list create view
+    GET and POST endpoint
+    """
+    queryset = Publisher.objects.all()
+    serializer_class = PublisherSerializer
+    permission_classes = [IsAuthenticated]
 
+
+class BookViewSet(viewsets.ModelViewSet):
+    """
+    Book model viewset
+    """
+    queryset = Book.objects.all()  # todo filtering
+    serializer_class = BookSerializer
+    permission_classes = [IsStaff]

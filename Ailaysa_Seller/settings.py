@@ -14,19 +14,16 @@ from datetime import timedelta
 from pathlib import Path
 import os
 import environ
-env = environ.Env(
-  # set casting, default value
-  DEBUG=(bool, False)
-)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# reading .env file
-environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
 
-SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("DEBUG")
+# reading .env file
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
+PRODUCTION_ENV = env.get_value('PRODUCTION_ENV', bool, False)
 
 
 # Quick-start development settings - unsuitable for production
@@ -34,11 +31,23 @@ DEBUG = env("DEBUG")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-$eu%(b#6d3ycv2p@_qyy8+(g4=q9z2o)1c6t6b=#6eqkcx1cno'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+
+# changing settings for allowed hosts
+if PRODUCTION_ENV:
+    DEBUG = False
+    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+    CORS_ALLOWED_ORIGINS = env.list('ALLOWED_CORS_ORIGINS')
+else:
+    ALLOWED_HOSTS = ['*']
+    CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Application definition
@@ -52,19 +61,25 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'Ailaysa_app',
-    'seller_auth',
+    'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
+
+    'seller_auth.apps.SellerAuthConfig',
+    'Ailaysa_app.apps.AilaysaAppConfig',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -73,14 +88,15 @@ MIDDLEWARE = [
 ]
 
 # Authentication User model
-AUTH_USER_MODEL = 'seller_auth.SellerUser'
+AUTH_USER_MODEL = 'seller_auth.User'
 
 # JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
-    'ROTATE_REFRESH_TOKENS': True
-  }
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 
 ROOT_URLCONF = 'Ailaysa_Seller.urls'
 
@@ -102,7 +118,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Ailaysa_Seller.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -116,7 +131,6 @@ DATABASES = {
         'PORT': env("DB_PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -136,7 +150,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -147,7 +160,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
