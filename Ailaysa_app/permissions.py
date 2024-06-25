@@ -7,4 +7,4 @@ class IsStaff(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        return obj.seller == request.user
+        return obj.publisher == request.user.publisher

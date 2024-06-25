@@ -1,5 +1,5 @@
 from django.contrib import admin
-from seller_auth.models import SellerUser
+from seller_auth.models import User
 
 
-admin.site.register(SellerUser)
+admin.site.register(User)

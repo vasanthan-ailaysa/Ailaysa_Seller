@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from seller_auth.models import SellerUser
+from seller_auth.models import User
 
 
 class ResisterTestCase(APITestCase):
@@ -32,7 +32,7 @@ class LoginLogoutTestCase(APITestCase):
         """
         function to create the user
         """
-        self.user = SellerUser.objects.create_user(
+        self.user = User.objects.create_user(
             name="testcaseuser",
             email="testcaseuser@gmail.com",
             password="1234@abcd"

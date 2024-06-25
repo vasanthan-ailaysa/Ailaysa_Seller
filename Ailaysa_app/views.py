@@ -3,7 +3,6 @@ from rest_framework.permissions import IsAuthenticated
 from Ailaysa_app.models import Book, Language, Genre, Author, Publisher
 from Ailaysa_app.serializers import BookSerializer, LanguageSerializer, GenreSerializer, AuthorSerializer, PublisherSerializer
 from Ailaysa_app.permissions import IsStaff
-from seller_auth.models import SellerUser
 
 
 class LanguageListView(generics.ListAPIView):

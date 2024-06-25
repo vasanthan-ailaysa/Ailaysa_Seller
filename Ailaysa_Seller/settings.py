@@ -88,7 +88,7 @@ MIDDLEWARE = [
 ]
 
 # Authentication User model
-AUTH_USER_MODEL = 'seller_auth.SellerUser'
+AUTH_USER_MODEL = 'seller_auth.User'
 
 # JWT settings
 SIMPLE_JWT = {

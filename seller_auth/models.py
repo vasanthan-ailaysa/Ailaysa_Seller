@@ -4,7 +4,7 @@ from seller_auth.Managers import UserManager
 from Ailaysa_app.models import Publisher
 
 
-class SellerUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     username = None
     name = models.CharField(max_length=100, unique=True, null=False)
     email = models.EmailField(max_length=100, unique=True, null=False)
