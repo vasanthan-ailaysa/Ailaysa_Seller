@@ -10,6 +10,6 @@ Registraion API View
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(SellerUser, request.data)
-        if serializer.is_valid():
-            serializer.save()
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
