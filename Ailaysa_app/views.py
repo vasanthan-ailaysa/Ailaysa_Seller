@@ -28,7 +28,7 @@ class AuthorListCreateView(generics.ListCreateAPIView):
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 
 class PublisherListCreateView(generics.ListCreateAPIView):
@@ -38,7 +38,7 @@ class PublisherListCreateView(generics.ListCreateAPIView):
     """
     queryset = Publisher.objects.all()
     serializer_class = PublisherSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -47,4 +47,4 @@ class BookViewSet(viewsets.ModelViewSet):
     """
     queryset = Book.objects.all()  # todo filtering
     serializer_class = BookSerializer
-    permission_classes = [IsStaff]
+    # permission_classes = [IsStaff]
