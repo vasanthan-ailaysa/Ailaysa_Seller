@@ -7,7 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
     """
     serializer class for User model
     """
-    publisher = PublisherSerializer(many=True)
 
     class Meta:
         model = User
