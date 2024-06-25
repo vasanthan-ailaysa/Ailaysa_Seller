@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
-
 # validate isbn13 min,max length
 isbn13_min_length_validator = MinLengthValidator(13, "ISBN-13 must be exactly 13 characters long.")
 isbn13_max_length_validator = MaxLengthValidator(17, "ISBN-13 cannot exceed 17 characters in length.")
@@ -66,7 +65,7 @@ class Book(models.Model):
     """
     Book model class
     """
-    
+
     FORMAT_CHOICES = [
         ('Paperback', 'Paperback'),
         ('Hardcover', 'Hardcover'),
@@ -76,14 +75,16 @@ class Book(models.Model):
     ]
 
     title = models.CharField(max_length=200)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False, blank=False, related_name='books', related_query_name='book')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, blank=False, related_name='books',
+                               related_query_name='book')
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=False, blank=False, related_name='books',
+                                  related_query_name='book')
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False, blank=False)  # dropdown list
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False, blank=False)  # dropdownList
-    isbn10 = models.CharField(max_length=10, unique=True, validators=[isbn10_min_length_validator,
-                                                                      isbn10_max_length_validator])  # International Standard Book NUmber
-    isbn13 = models.CharField(max_length=17, unique=True, validators=[isbn13_min_length_validator,
-                                                                      isbn13_max_length_validator])  # International Standard Book NUmber
+    isbn10 = models.CharField(max_length=10, unique=True, null=False, validators=[isbn10_min_length_validator,
+                                                                                  isbn10_max_length_validator])  # International Standard Book NUmber
+    isbn13 = models.CharField(max_length=17, unique=True, null=False, validators=[isbn13_min_length_validator,
+                                                                                  isbn13_max_length_validator])  # International Standard Book NUmber
     date_of_publication = models.DateField()
     number_of_pages = models.PositiveIntegerField()
     book_cover = models.ImageField(upload_to='profile_pictures/', blank=False, null=False)
