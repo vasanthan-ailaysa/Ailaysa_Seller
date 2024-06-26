@@ -97,7 +97,7 @@ class Book(models.Model):
     unit_weight = models.IntegerField(null=True, blank=True)
     title_in_original_language = models.CharField(max_length=50, null=True)
     co_publisher = models.CharField(max_length=100, null=True)
-    winner = models.TextField(null=True)
+    winner = models.TextField(null=True, blank=True)
     country_of_publication = models.CharField(max_length=100, help_text="Country of publication", null=True)
     designed_by = models.CharField(max_length=50, blank=True, null=True)
     edited_by = models.CharField(max_length=50, blank=True, null=True)

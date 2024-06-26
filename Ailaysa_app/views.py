@@ -19,7 +19,15 @@ class GenreListView(generics.ListAPIView):
     """
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-        
+
+
+class PublisherListCreateView(generics.ListCreateAPIView):
+    """
+    View to list all publishers
+    """
+    queryset = Publisher.objects.all()
+    serializer_class = PublisherSerializer
+
 
 class AuthorListCreateView(generics.ListCreateAPIView):
     """
@@ -31,20 +39,10 @@ class AuthorListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class PublisherListCreateView(generics.ListCreateAPIView):
-    """
-    Publisher list create view
-    GET and POST endpoint
-    """
-    queryset = Publisher.objects.all()
-    serializer_class = PublisherSerializer
-    permission_classes = [IsAuthenticated]
-
-
 class BookViewSet(viewsets.ModelViewSet):
     """
     Book model viewset
     """
     queryset = Book.objects.all()  # todo filtering
     serializer_class = BookSerializer
-    permission_classes = [IsStaff]
+    permission_classes = [IsAuthenticated, IsStaff]
