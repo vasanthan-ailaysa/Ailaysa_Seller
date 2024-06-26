@@ -77,8 +77,21 @@ class LoginTestCase(APITestCase):
             'email': 'testuser@gmail.com',
             'password': '1234@abcd',
         }
+
         response = self.client.post(reverse('login'), login_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_login_invalid(self):
+        """
+        test login for invalid data
+        """
+        login_data = {
+            'email': 'testuser@gmail.com',
+            'password': '1234@abcd23',
+        }
+
+        response = self.client.post(reverse('login'), login_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class LogoutTestCase(APITestCase):
@@ -111,3 +124,12 @@ class LogoutTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.post(reverse('logout'), {'refresh_token': f'{self.refresh_token}'})
         self.assertEqual(response.status_code, status.HTTP_205_RESET_CONTENT)
+
+    def test_logout_invalid(self):
+        """
+        test logout endpoint for invalid token
+        """
+        self.refresh_token = 12345
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        response = self.client.post(reverse('logout'), {'refresh_token': f'{self.refresh_token}'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
