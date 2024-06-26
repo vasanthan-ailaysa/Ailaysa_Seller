@@ -25,14 +25,14 @@ class ResisterTestCase(APITestCase):
         """
         test register endpoint for valid data
         """
-        register_data = {
+        valid_data = {
             'name': 'user1',
             'email': 'user1@gmail.com',
             'password': '1234@abcd',
             'publisher': self.publisher.pk,
         }
 
-        response = self.client.post(reverse('sign_up'), register_data)
+        response = self.client.post(reverse('sign_up'), valid_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = User.objects.get(name='user1')
@@ -43,14 +43,14 @@ class ResisterTestCase(APITestCase):
         """
         test register endpoint for invalid data
         """
-        register_data = {
+        invalid_data = {
             'name': 'user2',
             'email': 'user2gmail.com',
             'password': '1234@abcd',
             'publisher': '1'
         }
 
-        response = self.client.post(reverse('sign_up'), register_data)
+        response = self.client.post(reverse('sign_up'), invalid_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
@@ -73,24 +73,24 @@ class LoginTestCase(APITestCase):
         """
         test login for valid data
         """
-        login_data = {
+        valid_data = {
             'email': 'testuser@gmail.com',
             'password': '1234@abcd',
         }
 
-        response = self.client.post(reverse('login'), login_data)
+        response = self.client.post(reverse('login'), valid_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_invalid(self):
         """
         test login for invalid data
         """
-        login_data = {
+        invalid_data = {
             'email': 'testuser@gmail.com',
             'password': '1234@abcd23',
         }
 
-        response = self.client.post(reverse('login'), login_data)
+        response = self.client.post(reverse('login'), invalid_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -108,11 +108,11 @@ class LogoutTestCase(APITestCase):
             email='testuser@gmail.com',
             password='1234@abcd'
         )
-        login_data = {
+        data = {
             'email': 'testuser@gmail.com',
             'password': '1234@abcd',
         }
-        response = self.client.post(reverse('login'), login_data)
+        response = self.client.post(reverse('login'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.refresh_token = response.data['refresh']
         self.access_token = response.data['access']
@@ -129,7 +129,7 @@ class LogoutTestCase(APITestCase):
         """
         test logout endpoint for invalid token
         """
-        self.refresh_token = 12345
+        self.refresh_token = 12345      # passing invalid refresh token
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.post(reverse('logout'), {'refresh_token': f'{self.refresh_token}'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
