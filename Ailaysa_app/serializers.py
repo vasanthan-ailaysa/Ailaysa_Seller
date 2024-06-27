@@ -1,6 +1,6 @@
 # Serializers.py
 from rest_framework import serializers
-from Ailaysa_app.models import Book, Author, Publisher, Language, Genre
+from Ailaysa_app.models import Book, Language, Genre, Format
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -9,24 +9,6 @@ class BookSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Book
-        fields = '__all__'
-
-
-class AuthorSerializer(serializers.ModelSerializer):
-    """
-    Serializer class for Author Model
-    """
-    class Meta:
-        model = Author
-        fields = '__all__'
-
-
-class PublisherSerializer(serializers.ModelSerializer):
-    """
-    Serializer class for Publisher Model
-    """
-    class Meta:
-        model = Publisher
         fields = '__all__'
 
 
@@ -45,4 +27,13 @@ class GenreSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Genre
+        fields = '__all__'
+
+
+class FormateSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for Genre model
+    """
+    class Meta:
+        model = Format
         fields = '__all__'

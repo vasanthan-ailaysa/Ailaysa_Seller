@@ -3,7 +3,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from seller_auth.models import User
 from seller_auth.serializers import UserSerializer
-from Ailaysa_app.models import Publisher
 
 
 class ResisterTestCase(APITestCase):
