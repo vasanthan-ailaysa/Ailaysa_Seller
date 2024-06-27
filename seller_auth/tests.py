@@ -11,16 +11,6 @@ class ResisterTestCase(APITestCase):
     To test registration endpoint
     """
 
-    def setUp(self):
-        """
-        setup function to create publisher
-        """
-        self.publisher = Publisher.objects.create(
-            name='publisher1',
-            address='chennai',
-            country='India'
-        )
-
     def test_register_valid(self):
         """
         test register endpoint for valid data
@@ -29,7 +19,6 @@ class ResisterTestCase(APITestCase):
             'name': 'user1',
             'email': 'user1@gmail.com',
             'password': '1234@abcd',
-            'publisher': self.publisher.pk,
         }
 
         response = self.client.post(reverse('sign_up'), valid_data)
@@ -47,7 +36,6 @@ class ResisterTestCase(APITestCase):
             'name': 'user2',
             'email': 'user2gmail.com',
             'password': '1234@abcd',
-            'publisher': '1'
         }
 
         response = self.client.post(reverse('sign_up'), invalid_data)
