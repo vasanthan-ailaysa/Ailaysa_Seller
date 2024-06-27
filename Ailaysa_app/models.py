@@ -87,8 +87,7 @@ class Book(models.Model):
                                                                                   isbn13_max_length_validator])  # International Standard Book NUmber
     date_of_publication = models.DateField()
     number_of_pages = models.PositiveIntegerField()
-    book_cover = models.ImageField(upload_to='profile_pictures/', blank=False, null=False)
-    author_bio = models.TextField(null=True, blank=True)
+    book_cover = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
     format = models.CharField(max_length=50, choices=FORMAT_CHOICES)
