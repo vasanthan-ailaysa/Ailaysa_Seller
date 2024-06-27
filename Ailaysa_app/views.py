@@ -41,8 +41,11 @@ class AuthorListCreateView(generics.ListCreateAPIView):
 
 class BookViewSet(viewsets.ModelViewSet):
     """
-    Book model viewset
+    Book model view set
     """
-    queryset = Book.objects.all()  # todo filtering
+
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated, IsStaff]
+
+    def get_queryset(self):
+        return Book.objects.filter(publisher=self.request.user.publisher)

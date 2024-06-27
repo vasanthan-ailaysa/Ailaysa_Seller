@@ -104,7 +104,6 @@ class PublisherTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-
 class AuthorTest(APITestCase):
     """
     TO test GET endpoint of Author
@@ -151,7 +150,6 @@ class AuthorTest(APITestCase):
         response = self.client.get(reverse('author'))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)      # checking the status code
 
-
     def test_author_post_valid(self):
         """
         Test author POST (create) endpoint
@@ -190,5 +188,3 @@ class AuthorTest(APITestCase):
         }
         response = self.client.post(reverse('author'), valid_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)     # checking the status code
-
-
