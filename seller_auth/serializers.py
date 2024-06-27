@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from seller_auth.models import User
-from Ailaysa_app.serializers import PublisherSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):

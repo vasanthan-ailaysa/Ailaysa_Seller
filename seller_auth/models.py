@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from seller_auth.Managers import UserManager
-from Ailaysa_app.models import Publisher
 
 
 class User(AbstractBaseUser, PermissionsMixin):
