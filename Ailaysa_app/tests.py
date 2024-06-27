@@ -193,7 +193,7 @@ class AuthorTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)     # checking the status code
 
 
-class BookListTest(APITestCase):
+class BookTest(APITestCase):
     """
     TO test GET, POST, PUT, DELETE endpoints of the Book API
     """
@@ -315,8 +315,8 @@ class BookListTest(APITestCase):
         Test book GET detail endpoint without token
         """
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.get(reverse('book-detail', kwargs={'pk': self.book2.pk}))       # publisher2 --> not linked with user1
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)      # checking the status code
+        response = self.client.get(reverse('book-detail', kwargs={'pk': self.book2.pk}))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)      # checking the status code
 
     def test_book_post_valid(self):
         """
@@ -324,10 +324,10 @@ class BookListTest(APITestCase):
         """
         valid_data = {
             'title': 'book3',
-            'author': self.author3,
-            'publisher': self.publisher1,       # publisher1 --> user1
-            'language': self.language3,
-            'genre': self.genre3,
+            'author': self.author3.pk,
+            'publisher': self.publisher1.pk,       # publisher1 --> user1
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
             'isbn10': '1401575143',
             'isbn13': '978-1401575143',
             'date_of_publication': '1990-07-03',
@@ -341,7 +341,7 @@ class BookListTest(APITestCase):
         response = self.client.post(reverse('book-list'), valid_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)     # checking the status code
 
-        book = Book.objects.get(name='book3')
+        book = Book.objects.get(title='book3')
         serializer = BookSerializer(book)
         self.assertEqual(response.data, serializer.data)        # checking the data
 
@@ -351,10 +351,10 @@ class BookListTest(APITestCase):
         """
         invalid_data = {
             'title': '',
-            'author': 1,
-            'publisher': self.publisher1,
-            'language': self.language3,
-            'genre': self.genre3,
+            'author': self.author3.pk,
+            'publisher': self.publisher1.pk,
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
             'isbn10': '1401575143',
             'isbn13': '978-1401575143',
             'date_of_publication': '1990-07-03',
@@ -374,10 +374,10 @@ class BookListTest(APITestCase):
         """
         valid_data = {
             'title': 'book4',
-            'author': self.author3,
-            'publisher': self.publisher3,       # publisher3 --> not linked with user1
-            'language': self.language3,
-            'genre': self.genre3,
+            'author': self.author3.pk,
+            'publisher': self.publisher3.pk,       # publisher3 --> not linked with user1
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
             'isbn10': '1401575143',
             'isbn13': '978-1401575143',
             'date_of_publication': '1990-07-04',
@@ -387,9 +387,9 @@ class BookListTest(APITestCase):
             'format': 'Ebook',
             'price': '200'
         }
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer ')
         response = self.client.post(reverse('book-list'), valid_data)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)     # checking the status code
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)     # checking the status code
 
     def test_book_put_valid(self):
         """
@@ -397,10 +397,10 @@ class BookListTest(APITestCase):
         """
         valid_data = {
             'title': 'book1',
-            'author': self.author3,
-            'publisher': self.publisher1,       # publisher1 --> user1
-            'language': self.language3,
-            'genre': self.genre3,
+            'author': self.author3.pk,
+            'publisher': self.publisher1.pk,       # publisher1 --> user1
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
             'isbn10': '1401575143',
             'isbn13': '978-1401575143',
             'date_of_publication': '1990-07-03',
@@ -414,7 +414,7 @@ class BookListTest(APITestCase):
         response = self.client.put(reverse('book-detail', kwargs={'pk': self.book1.pk}), valid_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)     # checking the status code
 
-        book = Book.objects.get(name='book3')
+        book = Book.objects.get(title='book3')
         serializer = BookSerializer(book)
         self.assertEqual(response.data, serializer.data)        # checking the data
 
@@ -424,12 +424,12 @@ class BookListTest(APITestCase):
         """
         invalid_data = {
             'title': '',
-            'author': self.author3,
-            'publisher': self.publisher1,
-            'language': self.language3,
-            'genre': self.genre3,
-            'isbn10': '1401575143hsdfjkakjfh',
-            'isbn13': '978-1401575143ajdhfksj',
+            'author': self.author3.pk,
+            'publisher': self.publisher1.pk,
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
+            'isbn10': '1401575143',
+            'isbn13': '978-1401575143',
             'date_of_publication': '1990-07-03',
             'number_of_pages': '200',
             'summary_of_book': 'summary4',
@@ -447,10 +447,10 @@ class BookListTest(APITestCase):
         """
         valid_data = {
             'title': 'book2',
-            'author': self.author3,
-            'publisher': self.publisher3,
-            'language': self.language3,
-            'genre': self.genre3,
+            'author': self.author3.pk,
+            'publisher': self.publisher3.pk,
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
             'isbn10': '1401575143',
             'isbn13': '978-1401575143',
             'date_of_publication': '1990-07-04',

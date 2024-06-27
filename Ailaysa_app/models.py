@@ -19,6 +19,8 @@ class Author(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 
@@ -33,6 +35,8 @@ class Publisher(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 
@@ -45,6 +49,8 @@ class Language(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.language
 
@@ -56,6 +62,8 @@ class Genre(models.Model):
     genre = models.CharField(max_length=50, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.genre
@@ -93,6 +101,7 @@ class Book(models.Model):
     format = models.CharField(max_length=50, choices=FORMAT_CHOICES)
     price = models.IntegerField(default=0)
     # non-mandatory fields
+    author_bio = models.TextField(blank=True, null=True)
     unit_weight = models.IntegerField(null=True, blank=True)
     title_in_original_language = models.CharField(max_length=50, null=True)
     co_publisher = models.CharField(max_length=100, null=True)
@@ -103,6 +112,11 @@ class Book(models.Model):
     translated_by = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.author_bio = self.author.about
 
     def __str__(self):
         return self.title
