@@ -6,9 +6,9 @@ from Ailaysa_app.serializers import BookSerializer
 from seller_auth.models import User
 
 
-class BookListTestCase(APITestCase):
+class BookTestCase(APITestCase):
     """
-    TO test GET List endpoint of the Book API
+    TO test GET, POST, PUT, DELETE endpoint of the Book API
     """
 
     def setUp(self):
@@ -42,9 +42,9 @@ class BookListTestCase(APITestCase):
         self.genre3 = Genre.objects.create(genre='genre3')
 
         # create sample formate
-        self.format1 = Genre.objects.create(format='format1')
-        self.format2 = Genre.objects.create(format='format2')
-        self.format3 = Genre.objects.create(format='format3')
+        self.format1 = Format.objects.create(format='format1')
+        self.format2 = Format.objects.create(format='format2')
+        self.format3 = Format.objects.create(format='format3')
 
         # create sample book data in the database
         self.book1 = Book.objects.create(
@@ -91,7 +91,7 @@ class BookListTestCase(APITestCase):
             'number_of_pages': '200',
             'summary_of_book': 'summary3',
             'keywords': 'keyword3',
-            'format': self.format3,
+            'format': self.format3.pk,
             'price': '200'
         }
 
@@ -107,7 +107,7 @@ class BookListTestCase(APITestCase):
             'number_of_pages': '200',
             'summary_of_book': 'summary3',
             'keywords': 'keyword3',
-            'format': self.format3,
+            'format': self.format3.pk,
             'price': '200'
         }
 
@@ -119,7 +119,7 @@ class BookListTestCase(APITestCase):
         response = self.client.get(reverse('book-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)      # checking the status code
 
-        books = Book.objects.filter(publisher=self.user.publisher)      # get data from the database
+        books = Book.objects.all()      # get data from the database
         serializer = BookSerializer(books, many=True)
         self.assertEqual(response.data, serializer.data)        # checking the data
 
@@ -190,7 +190,7 @@ class BookListTestCase(APITestCase):
         """
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), self.valid_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # todo status code     # checking the status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # todo status code     # checking the status code
 
         book = Book.objects.get(title='book3')
         serializer = BookSerializer(book)
@@ -208,9 +208,8 @@ class BookListTestCase(APITestCase):
         """
         Test book PUT endpoint for invalid token
         """
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), self.valid_data)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)     # checking the status code
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)     # checking the status code
 
     def test_book_delete_valid(self):
         """
