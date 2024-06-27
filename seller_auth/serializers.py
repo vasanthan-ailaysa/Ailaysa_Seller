@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from seller_auth.models import User
-from Ailaysa_app.serializers import PublisherSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,7 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create(
             email=validated_data['email'],
             name=validated_data['name'],
-            publisher=validated_data['publisher']
         )
         user.set_password(validated_data['password'])
         user.save()
