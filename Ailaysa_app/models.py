@@ -63,7 +63,7 @@ class Book(models.Model):
     author_bio = models.TextField(null=True, blank=True)
     summary_of_book = models.TextField()
     keywords = models.CharField(max_length=255, help_text="Comma-separated keywords")
-    format = models.CharField(max_length=50, choices=FORMAT_CHOICES) # uses choices
+
 
     # non-mandatory fields
     unit_weight = models.IntegerField(null=True, blank=True)
