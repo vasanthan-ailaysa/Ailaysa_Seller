@@ -7,8 +7,8 @@ router = DefaultRouter()
 router.register(r'books', BookViewSet, basename='book')
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('language/', LanguageListView.as_view(), name='language'),
     path('genre/', GenreListView.as_view(), name='genre'),
     path('format/', FormatListView.as_view(), name='format'),
+    path('', include(router.urls)),
 ]

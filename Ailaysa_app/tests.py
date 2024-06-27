@@ -6,9 +6,9 @@ from Ailaysa_app.serializers import BookSerializer
 from seller_auth.models import User
 
 
-class BookTest(APITestCase):
+class BookListTestCase(APITestCase):
     """
-    TO test GET, POST, PUT, DELETE endpoints of the Book API
+    TO test GET List endpoint of the Book API
     """
 
     def setUp(self):
@@ -17,7 +17,7 @@ class BookTest(APITestCase):
         create sample data
         """
 
-        # create sample user
+        # create sample user and storing the access token
         self.user = User.objects.create_user(
             name='test_user',
             email='testuser@gmail.com',
@@ -46,12 +46,11 @@ class BookTest(APITestCase):
         self.format2 = Genre.objects.create(format='format2')
         self.format3 = Genre.objects.create(format='format3')
 
-
         # create sample book data in the database
         self.book1 = Book.objects.create(
             title='book1',
-            author=self.author1,
-            publisher=self.publisher1,
+            author='author1',
+            publisher='publisher1',
             language=self.language1,
             genre=self.genre1,
             isbn10='1401575141',
@@ -60,14 +59,14 @@ class BookTest(APITestCase):
             number_of_pages='200',
             summary_of_book='summary1',
             keywords='keyword1',
-            format='Ebook',
+            format=self.format1,
             price='200'
         )
 
         self.book2 = Book.objects.create(
             title='book2',
-            author=self.author2,
-            publisher=self.publisher2,
+            author='author2',
+            publisher='publisher2',
             language=self.language2,
             genre=self.genre2,
             isbn10='1401575142',
@@ -76,9 +75,41 @@ class BookTest(APITestCase):
             number_of_pages='200',
             summary_of_book='summary2',
             keywords='keyword2',
-            format='Ebook',
+            format=self.format2,
             price='200'
         )
+
+        self.valid_data = {
+            'title': 'book3',
+            'author': 'author3',
+            'publisher': 'publisher1',
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
+            'isbn10': '1401575143',
+            'isbn13': '978-1401575143',
+            'date_of_publication': '1990-07-03',
+            'number_of_pages': '200',
+            'summary_of_book': 'summary3',
+            'keywords': 'keyword3',
+            'format': self.format3,
+            'price': '200'
+        }
+
+        self.invalid_data = {
+            'title': '',
+            'author': 'author3',
+            'publisher': 'publisher1',
+            'language': self.language3.pk,
+            'genre': self.genre3.pk,
+            'isbn10': '1401575143128489',
+            'isbn13': '978-14015751439823849',
+            'date_of_publication': '1990-07-03',
+            'number_of_pages': '200',
+            'summary_of_book': 'summary3',
+            'keywords': 'keyword3',
+            'format': self.format3,
+            'price': '200'
+        }
 
     def test_book_get_list(self):
         """
@@ -113,7 +144,7 @@ class BookTest(APITestCase):
 
     def test_book_get_detail_invalid(self):
         """
-        test book GET detail endpoint while the book does not exist
+        Test book GET detail endpoint for invalid data
         """
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.get(reverse('book-detail', kwargs={'pk': 30}))
@@ -121,33 +152,17 @@ class BookTest(APITestCase):
 
     def test_book_get_detail_unauthorised(self):
         """
-        Test book GET detail endpoint without token
+        Test book GET detail endpoint for invalid token
         """
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.get(reverse('book-detail', kwargs={'pk': self.book2.pk}))
+        response = self.client.get(reverse('book-detail', kwargs={'pk': self.book1.pk}))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)      # checking the status code
 
     def test_book_post_valid(self):
         """
-        Test book POST (create) endpoint
+        Test book POST endpoint for valid data
         """
-        valid_data = {
-            'title': 'book3',
-            'author': self.author3.pk,
-            'publisher': self.publisher1.pk,       # publisher1 --> user1
-            'language': self.language3.pk,
-            'genre': self.genre3.pk,
-            'isbn10': '1401575143',
-            'isbn13': '978-1401575143',
-            'date_of_publication': '1990-07-03',
-            'number_of_pages': '200',
-            'summary_of_book': 'summary3',
-            'keywords': 'keyword3',
-            'format': 'Ebook',
-            'price': '200'
-        }
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.post(reverse('book-list'), valid_data)
+        response = self.client.post(reverse('book-list'), self.valid_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)     # checking the status code
 
         book = Book.objects.get(title='book3')
@@ -156,72 +171,26 @@ class BookTest(APITestCase):
 
     def test_book_post_invalid(self):
         """
-        test book post (create) endpoint for invalid data
+        Test book post endpoint for invalid data
         """
-        invalid_data = {
-            'title': '',
-            'author': self.author3.pk,
-            'publisher': self.publisher1.pk,
-            'language': self.language3.pk,
-            'genre': self.genre3.pk,
-            'isbn10': '1401575143',
-            'isbn13': '978-1401575143',
-            'date_of_publication': '1990-07-03',
-            'number_of_pages': '200',
-            'summary_of_book': 'summary4',
-            'keywords': 'keyword4',
-            'format': 'Ebook',
-            'price': '200'
-        }
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.post(reverse('book-list'), invalid_data)
+        response = self.client.post(reverse('book-list'), self.invalid_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_book_post_unauthorised(self):
         """
-        Test book POST (create) endpoint without token
+        Test book POST endpoint for invalid token
         """
-        valid_data = {
-            'title': 'book4',
-            'author': self.author3.pk,
-            'publisher': self.publisher3.pk,       # publisher3 --> not linked with user1
-            'language': self.language3.pk,
-            'genre': self.genre3.pk,
-            'isbn10': '1401575143',
-            'isbn13': '978-1401575143',
-            'date_of_publication': '1990-07-04',
-            'number_of_pages': '200',
-            'summary_of_book': 'summary4',
-            'keywords': 'keyword4',
-            'format': 'Ebook',
-            'price': '200'
-        }
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer ')
-        response = self.client.post(reverse('book-list'), valid_data)
+        response = self.client.post(reverse('book-list'), self.valid_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)     # checking the status code
 
     def test_book_put_valid(self):
         """
-        Test book PUT (update) endpoint
+        Test book PUT endpoint for valid data
         """
-        valid_data = {
-            'title': 'book1',
-            'author': self.author3.pk,
-            'publisher': self.publisher1.pk,       # publisher1 --> user1
-            'language': self.language3.pk,
-            'genre': self.genre3.pk,
-            'isbn10': '1401575143',
-            'isbn13': '978-1401575143',
-            'date_of_publication': '1990-07-03',
-            'number_of_pages': '200',
-            'summary_of_book': 'summary5',
-            'keywords': 'keyword3',
-            'format': 'Ebook',
-            'price': '200'
-        }
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.put(reverse('book-detail', kwargs={'pk': self.book1.pk}), valid_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)     # checking the status code
+        response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), self.valid_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # todo status code     # checking the status code
 
         book = Book.objects.get(title='book3')
         serializer = BookSerializer(book)
@@ -229,56 +198,26 @@ class BookTest(APITestCase):
 
     def test_book_put_invalid(self):
         """
-        test book put (update) endpoint for invalid data
+        Test book PUT endpoint for invalid data
         """
-        invalid_data = {
-            'title': '',
-            'author': self.author3.pk,
-            'publisher': self.publisher1.pk,
-            'language': self.language3.pk,
-            'genre': self.genre3.pk,
-            'isbn10': '1401575143',
-            'isbn13': '978-1401575143',
-            'date_of_publication': '1990-07-03',
-            'number_of_pages': '200',
-            'summary_of_book': 'summary4',
-            'keywords': 'keyword4',
-            'format': 'Ebook',
-            'price': '200'
-        }
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.put(reverse('book-detail', kwargs={'pk': self.book1.pk}), invalid_data)
+        response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), self.invalid_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_book_put_unauthorised(self):
         """
-        Test book PUT (Update) endpoint  without token
+        Test book PUT endpoint for invalid token
         """
-        valid_data = {
-            'title': 'book2',
-            'author': self.author3.pk,
-            'publisher': self.publisher3.pk,
-            'language': self.language3.pk,
-            'genre': self.genre3.pk,
-            'isbn10': '1401575143',
-            'isbn13': '978-1401575143',
-            'date_of_publication': '1990-07-04',
-            'number_of_pages': '200',
-            'summary_of_book': 'summary4',
-            'keywords': 'keyword4',
-            'format': 'Ebook',
-            'price': '200'
-        }
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), valid_data)
+        response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), self.valid_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)     # checking the status code
 
     def test_book_delete_valid(self):
         """
-        Test DELETE endpoint for valid data
+        Test Book DELETE endpoint for valid data
         """
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-        response = self.client.delete(reverse('book-detail', kwargs={'pk': self.book1.pk}))
+        response = self.client.delete(reverse('book-detail', kwargs={'pk': self.book2.pk}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_book_delete_invalid(self):
@@ -291,8 +230,7 @@ class BookTest(APITestCase):
 
     def test_book_delete_unauthorised(self):
         """
-        Test DELETE endpoint for valid data
+        Test DELETE endpoint for invalid token
         """
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.delete(reverse('book-detail', kwargs={'pk': self.book2.pk}))
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
