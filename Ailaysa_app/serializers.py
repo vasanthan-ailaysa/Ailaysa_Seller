@@ -30,7 +30,7 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FormateSerializer(serializers.ModelSerializer):
+class FormatSerializer(serializers.ModelSerializer):
     """
     Serializer class for Genre model
     """
