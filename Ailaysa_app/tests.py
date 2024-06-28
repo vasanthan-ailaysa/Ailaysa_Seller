@@ -190,7 +190,7 @@ class BookTestCase(APITestCase):
         """
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.put(reverse('book-detail', kwargs={'pk': self.book2.pk}), self.valid_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK) # todo status code     # checking the status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)     # checking the status code
 
         book = Book.objects.get(title='book3')
         serializer = BookSerializer(book)
