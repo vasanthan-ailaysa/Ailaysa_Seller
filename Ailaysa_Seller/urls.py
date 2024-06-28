@@ -23,3 +23,4 @@ urlpatterns = [
     path('users/', include('seller_auth.urls')),
     path('api/', include('Ailaysa_app.urls')),
 ]
+ 
