@@ -14,6 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 import os
 import environ
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,6 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # reading .env file
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
+
+# Production environment settings
 PRODUCTION_ENV = env.get_value('PRODUCTION_ENV', bool, False)
 
 
@@ -30,7 +33,6 @@ PRODUCTION_ENV = env.get_value('PRODUCTION_ENV', bool, False)
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-$eu%(b#6d3ycv2p@_qyy8+(g4=q9z2o)1c6t6b=#6eqkcx1cno'
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -121,6 +123,7 @@ WSGI_APPLICATION = 'Ailaysa_Seller.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -131,6 +134,9 @@ DATABASES = {
         'PORT': env("DB_PORT"),
     }
 }
+
+if PRODUCTION_ENV:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -164,11 +170,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_URL = '/staticfiles/'
+MEDIA_URL = '/mediafiles/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

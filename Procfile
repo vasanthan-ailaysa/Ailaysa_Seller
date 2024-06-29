@@ -1,0 +1,1 @@
+web: gunicorn Ailaysa_Seller.wsgi --log-file -
