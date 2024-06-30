@@ -42,7 +42,7 @@ if PRODUCTION_ENV:
 
 
 # changing settings for allowed hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['vasanthanailaysa.pythonanywhere.com']
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
