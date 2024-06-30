@@ -14,7 +14,6 @@ from datetime import timedelta
 from pathlib import Path
 import os
 import environ
-import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,17 +37,13 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-
-# changing settings for allowed hosts
 if PRODUCTION_ENV:
     DEBUG = False
-    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-    CORS_ALLOWED_ORIGINS = env.list('ALLOWED_CORS_ORIGINS')
-else:
-    ALLOWED_HOSTS = ['*']
-    CORS_ALLOW_ALL_ORIGINS = True
 
+
+# changing settings for allowed hosts
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 
@@ -123,19 +118,16 @@ WSGI_APPLICATION = 'Ailaysa_Seller.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {}
-
-if not PRODUCTION_ENV:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': env("DB_NAME"),
         'USER': env("DB_USER"),
         'PASSWORD': env("DB_PASSWORD"),
         'HOST': env("DB_HOST"),
         'PORT': env("DB_PORT"),
     }
-else:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+}
 
 
 # Password validation

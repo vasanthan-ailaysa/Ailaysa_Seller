@@ -13,10 +13,8 @@ django-filter = "*"
 djangorestframework-simplejwt = "*"
 pillow = "*"
 django-cors-headers = "*"
-pip = "*"
-gunicorn = "*"
 whitenoise = "*"
-dj-database-url = "*"
+mysqlclient = "*"
 
 [dev-packages]
 
