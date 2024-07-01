@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # reading .env file
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
+
+# Production environment settings
 PRODUCTION_ENV = env.get_value('PRODUCTION_ENV', bool, False)
 
 
@@ -30,23 +32,18 @@ PRODUCTION_ENV = env.get_value('PRODUCTION_ENV', bool, False)
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-$eu%(b#6d3ycv2p@_qyy8+(g4=q9z2o)1c6t6b=#6eqkcx1cno'
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-
-# changing settings for allowed hosts
 if PRODUCTION_ENV:
     DEBUG = False
-    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-    CORS_ALLOWED_ORIGINS = env.list('ALLOWED_CORS_ORIGINS')
-else:
-    ALLOWED_HOSTS = ['*']
-    CORS_ALLOW_ALL_ORIGINS = True
 
+
+# changing settings for allowed hosts
+ALLOWED_HOSTS = ['vasanthanailaysa.pythonanywhere.com']
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 
@@ -92,8 +89,8 @@ AUTH_USER_MODEL = 'seller_auth.User'
 
 # JWT settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
@@ -123,7 +120,7 @@ WSGI_APPLICATION = 'Ailaysa_Seller.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': env("DB_NAME"),
         'USER': env("DB_USER"),
         'PASSWORD': env("DB_PASSWORD"),
@@ -131,6 +128,7 @@ DATABASES = {
         'PORT': env("DB_PORT"),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -164,11 +162,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

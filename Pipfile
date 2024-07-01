@@ -13,10 +13,11 @@ django-filter = "*"
 djangorestframework-simplejwt = "*"
 pillow = "*"
 django-cors-headers = "*"
-pip = "*"
+whitenoise = "*"
+mysqlclient = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
-python_full_version = "3.12.3"
+python_version = "3.10"
+python_full_version = "3.10"
