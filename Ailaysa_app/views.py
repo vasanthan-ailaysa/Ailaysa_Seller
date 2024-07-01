@@ -32,6 +32,11 @@ class BookViewSet(viewsets.ModelViewSet):
     """
     Book model view set
     """
-    queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Book.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
