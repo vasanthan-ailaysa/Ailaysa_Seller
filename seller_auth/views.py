@@ -18,7 +18,8 @@ class RegisterView(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except ValidationError:
+        except ValidationError as e:
+            
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
